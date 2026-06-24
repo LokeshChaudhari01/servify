@@ -38,7 +38,7 @@ export default async function Home() {
       <div className="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-extrabold text-gray-900 tracking-tight">Our Services</h2>
         <div className="mt-8 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-3 xl:gap-x-8">
-          {categories.map((cat) => (
+          {categories.map((cat: { category: string; _count: { id: number } }) => (
             <Link key={cat.category} href={`/services?category=${cat.category}`} className="group relative">
               <div className="relative w-full h-48 rounded-lg overflow-hidden bg-gray-100 group-hover:opacity-75 transition-opacity sm:aspect-w-2 sm:aspect-h-1 lg:aspect-w-1 lg:aspect-h-1">
                 <div className="w-full h-full flex items-center justify-center bg-gray-200">
