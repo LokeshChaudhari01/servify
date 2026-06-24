@@ -65,7 +65,7 @@ export default async function ProfilePage() {
           </div>
         ) : (
           <div className="space-y-6">
-            {user.bookings.map((booking) => (
+            {user.bookings.map((booking: any) => (
               <div key={booking.id} className="bg-white border border-gray-200 rounded-lg shadow-sm p-6 flex flex-col md:flex-row md:items-center md:justify-between">
                 <div className="mb-4 md:mb-0">
                   <div className="flex items-center gap-3 mb-2">
