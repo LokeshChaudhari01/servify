@@ -16,6 +16,14 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
+    const dbUser = await prisma.user.findUnique({
+      where: { id: session.user.id },
+    });
+
+    if (!dbUser) {
+      return NextResponse.json({ message: "User not found in database. Please log in again." }, { status: 401 });
+    }
+
     const { serviceId, date, timeSlot } = await req.json();
 
     if (!serviceId || !date || !timeSlot) {

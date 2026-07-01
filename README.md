@@ -9,6 +9,8 @@ Servify is a full-stack Next.js web application that allows users to discover, b
 - **Booking System**: Interactive calendar and time-slot selection (1-hour intervals).
 - **Authentication**: JWT-based email and password login, implemented securely using NextAuth.js.
 - **Payment Gateway**: Seamless integration with Razorpay to facilitate secure online payments.
+- **Transactions Management**: Dedicated section to view all past payments and explicitly retry pending or failed payments without duplicating orders.
+- **Email Notifications**: Automated booking confirmation emails sent to users via Brevo upon successful payment.
 - **User Dashboard**: Profile section allowing users to track their upcoming and past bookings, including payment statuses.
 
 ## Tech Stack
@@ -19,6 +21,7 @@ Servify is a full-stack Next.js web application that allows users to discover, b
 - **ORM**: [Prisma](https://www.prisma.io/) (with Prisma 7 driver adapters)
 - **Authentication**: [NextAuth.js](https://next-auth.js.org/) v5 (Auth.js)
 - **Payments**: [Razorpay](https://razorpay.com/)
+- **Emails**: [Brevo](https://www.brevo.com/) (formerly Sendinblue) via native API
 
 ## Getting Started
 
@@ -53,6 +56,10 @@ Servify is a full-stack Next.js web application that allows users to discover, b
    NEXT_PUBLIC_RAZORPAY_KEY_ID="your-razorpay-key-id"
    RAZORPAY_KEY_ID="your-razorpay-key-id"
    RAZORPAY_KEY_SECRET="your-razorpay-key-secret"
+
+   # Brevo Email API
+   BREVO_API_KEY="your_brevo_api_key_here"
+   BREVO_SENDER_EMAIL="noreply@servify.com"
    ```
 
 4. **Initialize the Database:**

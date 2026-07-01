@@ -28,6 +28,14 @@ export async function POST(req: Request) {
         razorpayPaymentId: razorpay_payment_id,
         razorpaySignature: razorpay_signature,
       },
+      include: {
+        booking: {
+          include: {
+            user: true,
+            service: true,
+          },
+        },
+      },
     });
 
     await prisma.booking.update({
@@ -36,6 +44,32 @@ export async function POST(req: Request) {
         status: "CONFIRMED",
       },
     });
+
+    // Send Confirmation Email
+    const { user, service, date, timeSlot } = payment.booking;
+    const htmlContent = `
+      <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
+        <h2 style="color: #2563eb;">Booking Confirmed!</h2>
+        <p>Hi ${user.name},</p>
+        <p>Your payment of <strong>₹${payment.amount}</strong> was successful. Your booking for <strong>${service.title}</strong> is confirmed.</p>
+        <div style="background-color: #f9fafb; padding: 15px; border-radius: 8px; margin: 20px 0;">
+          <p style="margin: 5px 0;"><strong>Service:</strong> ${service.title}</p>
+          <p style="margin: 5px 0;"><strong>Date:</strong> ${date}</p>
+          <p style="margin: 5px 0;"><strong>Time:</strong> ${timeSlot}</p>
+          <p style="margin: 5px 0;"><strong>Order ID:</strong> ${payment.razorpayOrderId}</p>
+        </div>
+        <p>Thank you for choosing Servify!</p>
+      </div>
+    `;
+
+    import("../../../../lib/email").then(({ sendEmail }) => {
+      sendEmail({
+        to: user.email,
+        toName: user.name,
+        subject: `Booking Confirmed: ${service.title}`,
+        htmlContent,
+      });
+    }).catch(console.error);
 
     return NextResponse.json({ message: "Payment verified successfully" }, { status: 200 });
   } catch (error) {

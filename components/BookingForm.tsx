@@ -99,9 +99,33 @@ export function BookingForm({
         theme: {
           color: "#2563eb", // blue-600
         },
+        modal: {
+          escape: true,
+          confirm_close: true,
+          ondismiss: async function () {
+            await fetch("/api/payments/fail", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ razorpay_order_id: bookingData.orderId }),
+            });
+            setError("Payment was cancelled. You can retry from your Transactions.");
+            setLoading(false);
+          },
+        },
       };
 
       const paymentObject = new (window as any).Razorpay(options);
+
+      paymentObject.on('payment.failed', async function (response: any) {
+        await fetch("/api/payments/fail", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ razorpay_order_id: bookingData.orderId }),
+        });
+        setError(response.error.description || "Payment failed.");
+        setLoading(false);
+      });
+
       paymentObject.open();
       
     } catch (err) {
@@ -117,7 +141,18 @@ export function BookingForm({
       <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
         <h3 className="text-xl font-semibold mb-4">Book this Service</h3>
         
-        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded relative mb-4 flex justify-between items-center">
+            <span className="text-sm">{error}</span>
+            <button
+              onClick={() => setError("")}
+              className="text-red-500 hover:text-red-700 font-bold text-lg leading-none"
+              aria-label="Close"
+            >
+              &times;
+            </button>
+          </div>
+        )}
         
         <div className="mb-6">
           <label className="block text-sm font-medium text-gray-700 mb-2">Select Date</label>

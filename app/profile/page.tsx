@@ -32,7 +32,7 @@ export default async function ProfilePage() {
   return (
     <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-extrabold text-gray-900">My Profile</h1>
+        <h1 className="text-4xl font-extrabold text-blue-700 tracking-tight">My Profile</h1>
         <p className="mt-2 text-sm text-gray-500">
           Manage your personal information and view booking history.
         </p>
@@ -57,7 +57,7 @@ export default async function ProfilePage() {
       </div>
 
       <div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">Booking History</h2>
+        <h2 className="text-3xl font-extrabold text-blue-700 tracking-tight mb-6">Booking History</h2>
         
         {user.bookings.length === 0 ? (
           <div className="bg-gray-50 text-center py-12 rounded-lg border border-gray-200">
