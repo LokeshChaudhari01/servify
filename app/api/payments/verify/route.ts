@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../../lib/prisma";
 import crypto from "crypto";
+import { sendEmail } from "../../../../lib/email";
 
 export async function POST(req: Request) {
   try {
@@ -62,14 +63,12 @@ export async function POST(req: Request) {
       </div>
     `;
 
-    import("../../../../lib/email").then(({ sendEmail }) => {
-      sendEmail({
-        to: user.email,
-        toName: user.name,
-        subject: `Booking Confirmed: ${service.title}`,
-        htmlContent,
-      });
-    }).catch(console.error);
+    await sendEmail({
+      to: user.email,
+      toName: user.name,
+      subject: `Booking Confirmed: ${service.title}`,
+      htmlContent,
+    });
 
     return NextResponse.json({ message: "Payment verified successfully" }, { status: 200 });
   } catch (error) {
